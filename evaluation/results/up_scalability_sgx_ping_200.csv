@@ -1,0 +1,4 @@
+concurrency,round,size_bytes,mean_rtt_ms,min_ue_rtt_ms,max_ue_rtt_ms,p95_ue_rtt_ms,mean_mdev_ms,mean_loss_pct
+200,1,1400,12.64,6.876,14.257,13.992,2.85,96.603
+200,2,1400,13.016,6.84,14.546,14.282,2.836,96.488
+200,3,1400,13.786,13.134,14.573,14.196,2.382,96.479

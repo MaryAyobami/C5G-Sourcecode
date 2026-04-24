@@ -1,0 +1,108 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    tab name="NRF" focus=true {
+        pane {
+            command "sudo"
+            args "gramine-sgx" "open5gs-nrf"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="SCP" {
+        pane {
+            command "bash"
+            args "-c" "sleep 3 && sudo gramine-sgx open5gs-scp"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="SEPP" {
+        pane {
+            command "bash"
+            args "-c" "sleep 3 && sudo gramine-sgx open5gs-sepp"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+
+    tab name="UDR" {
+        pane {
+            command "bash"
+            args "-c" "sleep 5 && sudo gramine-sgx open5gs-udr"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="UDM" {
+        pane {
+            command "bash"
+            args "-c" "sleep 7 && sudo gramine-sgx open5gs-udm"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="AUSF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 9 && sudo gramine-sgx open5gs-ausf"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="PCF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 11 && sudo gramine-sgx open5gs-pcf"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="SMF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 15 && sudo gramine-sgx open5gs-smf"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="UPF-NON" {
+        pane {
+            command "bash"
+            args "-c" "sleep 15 && sudo gramine-sgx open5gs-upf-nonblocking"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="NSSF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 17 && sudo gramine-sgx open5gs-nssf"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="BSF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 19 && sudo gramine-sgx open5gs-bsf"
+            cwd "/opt/open5gs-gramine/manifests"
+        }
+    }
+
+    tab name="Monitor" {
+        pane {
+            command "bash"
+            cwd "/home/operator"
+        }
+    }
+
+}

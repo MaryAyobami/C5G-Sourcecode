@@ -1,0 +1,25 @@
+# SSH connection details used by orchestrator.py.
+# Copy to servers.ini and fill in values for your own testbed.
+# Prefer key-based auth; password fields are supported but discouraged.
+
+[sgx_local]
+host     = 192.0.2.10
+user     = your-user
+key_file = ~/.ssh/id_ed25519
+
+[tdx_amf]
+host     = 198.51.100.11
+user     = your-user
+key_file = ~/.ssh/id_ed25519
+nf_ip    = 198.51.100.11
+
+[tdx_upf]
+host     = 198.51.100.12
+user     = your-user
+key_file = ~/.ssh/id_ed25519
+nf_ip    = 198.51.100.12
+
+[flex10]
+host     = 192.0.2.20
+user     = your-user
+key_file = ~/.ssh/id_ed25519

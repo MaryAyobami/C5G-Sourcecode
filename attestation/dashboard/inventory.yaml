@@ -1,0 +1,17 @@
+# Operator inventory for dashboard attestation.
+# Host/port the NF serves SBI on. Values are placeholders you set per testbed.
+
+nfs:
+  nrf:   { host: "127.0.0.1", port: 7777, tee: sgx }
+  udr:   { host: "127.0.0.1", port: 7786, tee: sgx }
+  udm:   { host: "127.0.0.1", port: 7778, tee: sgx }
+  ausf:  { host: "127.0.0.1", port: 7780, tee: sgx }
+  pcf:   { host: "127.0.0.1", port: 7781, tee: sgx }
+  bsf:   { host: "127.0.0.1", port: 7782, tee: sgx }
+  nssf:  { host: "127.0.0.1", port: 7783, tee: sgx }
+  scp:   { host: "127.0.0.1", port: 7785, tee: sgx }
+  smf:   { host: "127.0.0.1", port: 7784, tee: sgx }
+  sepp1: { host: "127.0.0.1", port: 7777, tee: sgx }
+  sepp2: { host: "127.0.0.1", port: 7777, tee: sgx }
+  amf:   { host: "198.51.100.11", port: 7779, tee: tdx }
+  upf:   { host: "198.51.100.12", port: 8805, tee: tdx }

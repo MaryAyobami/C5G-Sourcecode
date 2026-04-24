@@ -1,0 +1,78 @@
+
+libos.entrypoint = "/opt/open5gs-nonblocking/install/bin/open5gs-upfd"
+loader.argv = [
+    "/opt/open5gs-nonblocking/install/bin/open5gs-upfd",
+    "-c",
+    "/opt/open5gs-nonblocking/install/etc/open5gs/upf.yaml"
+]
+
+loader.env.LD_LIBRARY_PATH = "/opt/open5gs-nonblocking/install/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu"
+loader.env.MALLOC_ARENA_MAX = "4"
+loader.env.MALLOC_MMAP_THRESHOLD_ = "65536"
+
+# TUN proxy configuration
+loader.env.GRAMINE_TUN_PROXY_ADDR = "127.0.0.1"
+loader.env.GRAMINE_TUN_PROXY_PORT = "9999"
+
+loader.log_level = "error"
+# loader.insecure__use_host_env = true  # DISABLED for security - define env vars explicitly
+
+# Performance: Disable pointer validation (re-enable for debugging)
+libos.check_invalid_pointers = false
+
+sys.enable_sigterm_injection = true
+sys.enable_extra_runtime_domain_names_conf = true
+# sys.insecure__allow_eventfd = true  # DISABLED for security
+sys.stack.size = "16M"
+sys.fds.limit = 65536
+
+fs.root = { uri = "file:/" }
+fs.mounts = [
+    { path = "/var/local/log/open5gs", uri = "file:/usr/local/var/log/open5gs" },
+    { path = "/tmp", type = "tmpfs"},
+    { path = "/opt/open5gs-nonblocking/install/var/log/open5gs", uri = "file:/opt/open5gs-nonblocking/install/var/log/open5gs" },
+    # { path = "/opt/open5gs/install/var/log/open5gs", uri = "file:/opt/open5gs/install/var/log/open5gs" },
+]
+
+sgx.debug = true        # Required for sgx.enable_stats
+sgx.edmm_enable = false
+sgx.enclave_size = "32G"
+sgx.max_threads = 64
+sgx.remote_attestation = "none"
+sgx.file_check_policy = "strict"
+
+# Performance optimizations
+sgx.use_exinfo = true           # Better exception handling performance
+# sgx.enable_stats = true        # Enable runtime stats for OCALL measurement
+
+# Static configuration and binaries requiring hash verification
+# NOTE: Using directory wildcards for trusted_files is less secure but more convenient
+# For production, consider listing individual files for better security
+sgx.trusted_files = [
+    # Static configuration files
+    "file:/etc/nsswitch.conf",
+    "file:/etc/localtime",
+    "file:/etc/hosts",
+    "file:/etc/gai.conf",
+    "file:/etc/host.conf",
+    "file:/etc/ld.so.cache",
+
+    # Application binaries and libraries
+    "file:/opt/open5gs-nonblocking/install/bin/open5gs-upfd",
+    "file:/opt/open5gs-nonblocking/install/lib/",
+    "file:/lib/x86_64-linux-gnu/",
+    "file:/usr/lib/x86_64-linux-gnu/",
+    "file:/usr/lib/",
+]
+
+# Files that must be allowed (not trusted) due to dynamic changes or write access
+sgx.allowed_files = [
+    "file:/proc/sys/net/",        # Network stack runtime info
+    "file:/sys/class/net/",       # Network interfaces runtime info
+    "file:/etc/resolv.conf",      # DNS config (may change dynamically)
+    "file:/usr/local/var/log/open5gs/",  # Mapped log directory
+    "file:/opt/open5gs-nonblocking/install/var/log/open5gs/",
+    "file:/opt/open5gs-nonblocking/install/etc/open5gs/",
+    "file:/opt/open5gs/install/var/log/open5gs/",
+    "file:/opt/open5gs/install/etc/open5gs/",
+]

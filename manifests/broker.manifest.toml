@@ -1,0 +1,72 @@
+libos.entrypoint = "/usr/bin/python3.10"
+
+loader.argv = [
+  "/usr/bin/python3.10",
+  "-B",
+  "/opt/open5gs-gramine/attestation/issuer/cert_issuer.py",
+  "--plain-http",
+  "--host", "0.0.0.0",
+  "--port", "8443",
+]
+
+loader.env.LD_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu"
+loader.env.PYTHONDONTWRITEBYTECODE = "1"
+
+loader.log_level = "error"
+
+libos.check_invalid_pointers = false
+sys.enable_sigterm_injection = true
+sys.enable_extra_runtime_domain_names_conf = true
+
+fs.root = { uri = "file:/" }
+fs.mounts = [
+  { path = "/tmp", type = "tmpfs" },
+]
+
+sgx.file_check_policy = "strict"
+sgx.debug = false
+sgx.enclave_size = "512M"
+sgx.max_threads = 32
+sgx.use_exinfo = true
+
+sgx.allowed_files = [
+  "file:/etc/hosts",
+  "file:/etc/resolv.conf",
+  "file:/etc/gai.conf",
+  "file:/etc/host.conf",
+  "file:/etc/ld.so.cache",
+  "file:/etc/localtime",
+  "file:/etc/nsswitch.conf",
+  "file:/usr/lib/x86_64-linux-gnu/ossl-modules/",
+  "file:/usr/lib/x86_64-linux-gnu/engines-3/",
+  "file:/etc/ssl/openssl.cnf",
+  "file:/usr/lib/ssl/openssl.cnf",
+]
+
+sgx.trusted_files = [
+  "file:/usr/bin/python3.10",
+
+  "file:/usr/lib/python3.10/",
+  "file:/usr/lib/python3.10/lib-dynload/",
+
+  "file:/usr/lib/python3/dist-packages/cryptography/",
+  "file:/usr/lib/python3/dist-packages/yaml/",
+  "file:/usr/lib/python3/dist-packages/_cffi_backend.cpython-310-x86_64-linux-gnu.so",
+
+  "file:/usr/lib/x86_64-linux-gnu/libpython3.10.so.1.0",
+
+  "file:/lib/x86_64-linux-gnu/libc.so.6",
+  "file:/lib/x86_64-linux-gnu/libm.so.6",
+  "file:/lib/x86_64-linux-gnu/libexpat.so.1",
+  "file:/lib/x86_64-linux-gnu/libz.so.1",
+  "file:/lib/x86_64-linux-gnu/libffi.so.8",
+  "file:/lib/x86_64-linux-gnu/libssl.so.3",
+  "file:/lib/x86_64-linux-gnu/libcrypto.so.3",
+  "file:/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+
+  "file:/opt/open5gs-gramine/attestation/issuer/cert_issuer.py",
+
+  "file:/opt/open5gs-gramine/attestation/ca/operator_ca.key",
+  "file:/opt/open5gs-gramine/attestation/ca/operator_ca.crt",
+  "file:/opt/open5gs-gramine/attestation/measurements/measurements.yaml",
+]

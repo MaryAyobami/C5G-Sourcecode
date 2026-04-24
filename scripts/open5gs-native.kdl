@@ -1,0 +1,88 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    tab name="NRF" focus=true {
+        pane {
+            command "sudo"
+            args "/usr/local/bin/open5gs-nrfd" "-c" "/usr/local/etc/open5gs/nrf.yaml"
+        }
+    }
+
+    tab name="SCP" {
+        pane {
+            command "bash"
+            args "-c" "sleep 3 && sudo /usr/local/bin/open5gs-scpd -c /usr/local/etc/open5gs/scp.yaml"
+        }
+    }
+
+    tab name="UDR" {
+        pane {
+            command "bash"
+            args "-c" "sleep 5 && sudo /usr/local/bin/open5gs-udrd -c /usr/local/etc/open5gs/udr.yaml"
+        }
+    }
+
+    tab name="UDM" {
+        pane {
+            command "bash"
+            args "-c" "sleep 7 && sudo /usr/local/bin/open5gs-udmd -c /usr/local/etc/open5gs/udm.yaml"
+        }
+    }
+
+    tab name="AUSF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 9 && sudo /usr/local/bin/open5gs-ausfd -c /usr/local/etc/open5gs/ausf.yaml"
+        }
+    }
+
+    tab name="PCF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 11 && sudo /usr/local/bin/open5gs-pcfd -c /usr/local/etc/open5gs/pcf.yaml"
+        }
+    }
+
+    tab name="NSSF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 13 && sudo /usr/local/bin/open5gs-nssfd -c /usr/local/etc/open5gs/nssf.yaml"
+        }
+    }
+
+    tab name="BSF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 15 && sudo /usr/local/bin/open5gs-bsfd -c /usr/local/etc/open5gs/bsf.yaml"
+        }
+    }
+
+    tab name="AMF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 17 && sudo /usr/local/bin/open5gs-amfd -c /usr/local/etc/open5gs/amf.yaml"
+        }
+    }
+
+    tab name="SMF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 19 && sudo /usr/local/bin/open5gs-smfd -c /usr/local/etc/open5gs/smf.yaml"
+        }
+    }
+
+    tab name="UPF" {
+        pane {
+            command "bash"
+            args "-c" "sleep 21 && sudo /usr/local/bin/open5gs-upfd -c /usr/local/etc/open5gs/upf.yaml"
+        }
+    }
+}

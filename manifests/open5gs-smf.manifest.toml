@@ -1,0 +1,137 @@
+libos.entrypoint = "/usr/local/bin/open5gs-smfd"
+
+loader.argv = [
+  "/usr/local/bin/open5gs-smfd",
+  "-c",
+  "/usr/local/etc/open5gs/smf.yaml"
+]
+
+loader.env.LD_LIBRARY_PATH = "/usr/local/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu"
+
+loader.env.MALLOC_ARENA_MAX = "4"
+loader.env.MALLOC_MMAP_THRESHOLD_ = "131072"
+loader.log_level = "error"
+
+# Performance: Disable pointer validation (re-enable for debugging)
+libos.check_invalid_pointers = false
+
+sys.enable_extra_runtime_domain_names_conf = true
+# sys.insecure__allow_eventfd = true  # DISABLED for security
+sys.enable_sigterm_injection = true
+
+sys.fds.limit = 65536
+
+
+
+sys.allowed_ioctls = [
+  { request_code = 0x8910 },
+  { request_code = 0x8912 },
+  { request_code = 0x8913 },
+  { request_code = 0x8915 },
+  { request_code = 0x89F0 },
+  { request_code = 0x89F1 },
+  { request_code = 0x89F2 },
+  { request_code = 0x89F3 },
+  { request_code = 0x89F4 }
+]
+
+fs.root = { uri = "file:/" }
+
+fs.mounts = [
+  { path = "/var/local/log/open5gs", uri = "file:/usr/local/var/log/open5gs" },
+  { path = "/tmp", type = "tmpfs"},
+]
+
+sgx.file_check_policy = "strict"
+sgx.debug = true        # Required for sgx.enable_stats
+# sgx.remote_attestation = "dcap"
+sgx.enclave_size = "16G"
+sgx.max_threads = 64
+
+# Performance optimizations
+sgx.use_exinfo = true           # Better exception handling performance
+# sgx.enable_stats = true        # Enable runtime stats for OCALL measurement
+
+# Files that must be allowed (not trusted) due to dynamic changes or write access
+sgx.allowed_files = [
+  "file:/etc/hosts",
+  "file:/etc/resolv.conf",
+  "file:/etc/gai.conf",
+  "file:/etc/host.conf",
+  "file:/etc/ld.so.cache",
+  "file:/usr/local/var/log/open5gs/",
+  "file:/usr/local/etc/open5gs/tls/",        # TLS keys (sensitive, not hashed)
+  "file:/usr/local/etc/freeDiameter/smf.conf",
+]
+
+# Static configuration and binaries requiring hash verification
+sgx.trusted_files = [
+  "file:/opt/open5gs-gramine/attestation/ca/operator_ca.crt",
+  "file:/etc/nsswitch.conf",
+  "file:/usr/local/etc/open5gs/smf.yaml",
+  "file:/etc/localtime",
+  "file:/lib/x86_64-linux-gnu/libcurl.so.4",
+  "file:/usr/local/bin/open5gs-smfd",
+  "file:/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",    
+  "file:/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+  "file:/lib/x86_64-linux-gnu/libbrotlicommon.so.1",
+  "file:/lib/x86_64-linux-gnu/libbrotlidec.so.1",
+  "file:/lib/x86_64-linux-gnu/libcom_err.so.2",
+  "file:/lib/x86_64-linux-gnu/libcrypto.so.3",
+  "file:/lib/x86_64-linux-gnu/libc.so.6",
+  "file:/lib/x86_64-linux-gnu/libcurl-gnutls.so.4",
+  "file:/lib/x86_64-linux-gnu/libffi.so.8",
+  "file:/lib/x86_64-linux-gnu/libgmp.so.10",
+  "file:/lib/x86_64-linux-gnu/libgnutls.so.30",
+  "file:/lib/x86_64-linux-gnu/libgssapi_krb5.so.2",
+  "file:/lib/x86_64-linux-gnu/libhogweed.so.6",
+  "file:/lib/x86_64-linux-gnu/libidn2.so.0",
+  "file:/lib/x86_64-linux-gnu/libidn.so.12",
+  "file:/lib/x86_64-linux-gnu/libk5crypto.so.3",
+  "file:/lib/x86_64-linux-gnu/libkeyutils.so.1",
+  "file:/lib/x86_64-linux-gnu/libkrb5.so.3",
+  "file:/lib/x86_64-linux-gnu/libkrb5support.so.0",
+  "file:/lib/x86_64-linux-gnu/liblber-2.5.so.0",
+  "file:/lib/x86_64-linux-gnu/libldap-2.5.so.0",
+  "file:/lib/x86_64-linux-gnu/libmicrohttpd.so.12",
+  "file:/lib/x86_64-linux-gnu/libnettle.so.8",
+  "file:/lib/x86_64-linux-gnu/libnghttp2.so.14",
+  "file:/lib/x86_64-linux-gnu/libp11-kit.so.0",
+  "file:/lib/x86_64-linux-gnu/libpsl.so.5",
+  "file:/lib/x86_64-linux-gnu/libresolv.so.2",
+  "file:/lib/x86_64-linux-gnu/librtmp.so.1",
+  "file:/lib/x86_64-linux-gnu/libsasl2.so.2",
+  "file:/lib/x86_64-linux-gnu/libsctp.so.1",
+  "file:/lib/x86_64-linux-gnu/libssh.so.4",
+  "file:/lib/x86_64-linux-gnu/libssl.so.3",
+  "file:/lib/x86_64-linux-gnu/libtalloc.so.2",
+  "file:/lib/x86_64-linux-gnu/libtasn1.so.6",
+  "file:/lib/x86_64-linux-gnu/libunistring.so.2",
+  "file:/lib/x86_64-linux-gnu/libyaml-0.so.2",
+  "file:/lib/x86_64-linux-gnu/libz.so.1",
+  "file:/lib/x86_64-linux-gnu/libzstd.so.1",
+  "file:/usr/local/lib/x86_64-linux-gnu/libfdcore.so.7",
+  "file:/usr/local/lib/x86_64-linux-gnu/libfdproto.so.7",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsapp.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsasn1c-common.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsasn1c-ngap.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsasn1c-util.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogscore.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogscrypt.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsdiameter-common.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsdiameter-gx.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsdiameter-gy.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsdiameter-rx.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsdiameter-s6b.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsgtp.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsipfw.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsmetrics.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsnas-5gs.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsnas-common.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsngap.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogspfcp.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogsproto.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogssbi-openapi.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libogssbi.so.2",
+  "file:/usr/local/lib/x86_64-linux-gnu/libprom.so",
+]
